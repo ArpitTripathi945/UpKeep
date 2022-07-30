@@ -47,7 +47,7 @@ android {
         applicationId "com.example.upkeep"
         minSdkVersion 24
         targetSdkVersion 30.
-        versionCode flutterVersionCode.toInteger()
+        //versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
     }
