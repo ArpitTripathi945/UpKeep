@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 3),
+        Duration(seconds: 1),
         () => Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (BuildContext context) => LoginPage())));
   }
@@ -24,9 +24,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(248, 4, 1, 79),
+      backgroundColor: Color.fromARGB(255, 0, 5, 46),
       body: Center(
-        child: Image.asset('assets/images/UpKeep.png'),
+        child: Image.asset('assets/UpKeepi.png'),
       ),
     );
   }

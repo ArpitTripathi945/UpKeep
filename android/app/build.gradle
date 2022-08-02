@@ -28,7 +28,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion 31  
-    //ndkVersion flutter.ndkVersion
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -46,8 +46,8 @@ android {
     defaultConfig {
         applicationId "com.example.upkeep"
         minSdkVersion 24
-        targetSdkVersion 30.
-        //versionCode flutterVersionCode.toInteger()
+        targetSdkVersion 30
+        versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
     }
