@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         Duration(seconds: 1),
         () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (BuildContext context) => MainPage())));
+            MaterialPageRoute(builder: (BuildContext context) => LoginPage())));
   }
 
   @override

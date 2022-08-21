@@ -14,27 +14,26 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  final formkey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
 
   @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Material(
-          color: Color.fromARGB(255, 15, 17, 32),
-          child: SingleChildScrollView(
-              child: Column(children: [
+    return Material(
+        color: Color.fromARGB(255, 15, 17, 32),
+        child: SingleChildScrollView(
+            child: Form(
+          key: formkey,
+          child: Column(children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 40, 325, 20),
               child: IconButton(
@@ -79,6 +78,7 @@ class _LoginViewState extends State<LoginView> {
                   },
                   style: TextStyle(color: Colors.white),
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.black45,
@@ -97,6 +97,7 @@ class _LoginViewState extends State<LoginView> {
             Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: TextFormField(
+                  textInputAction: TextInputAction.done,
                   controller: passwordController,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -118,20 +119,8 @@ class _LoginViewState extends State<LoginView> {
                 )),
             const SizedBox(height: 35),
             ElevatedButton(
-              onPressed: () async {
-                try {
-                  final user = await _auth.signInWithEmailAndPassword(
-                      email: emailController.text.trim(),
-                      password: passwordController.text.trim());
-                  if (user != null) {
-                    Navigator.pushNamed(context, MyRoutes.homeRoute);
-                  }
-                } on FirebaseAuthException catch (e) {
-                  Fluttertoast.showToast(
-                      msg: "User does not exist",
-                      fontSize: 18,
-                      toastLength: Toast.LENGTH_LONG);
-                }
+              onPressed: () {
+                signIn(emailController.text, passwordController.text);
               },
               child: Text("Login"),
               style: ElevatedButton.styleFrom(
@@ -139,7 +128,23 @@ class _LoginViewState extends State<LoginView> {
                 primary: Color.fromARGB(255, 75, 71, 232),
               ),
             ),
-          ]))),
-    );
+          ]),
+        )));
+  }
+
+  void signIn(String email, String password) async {
+    if (formkey.currentState!.validate()) {
+      await _auth
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text)
+          .then((uid) => {
+                Fluttertoast.showToast(msg: "Login Successful"),
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => HomeView()))
+              })
+          .catchError((e) {
+        Fluttertoast.showToast(msg: e!.message);
+      });
+    }
   }
 }
