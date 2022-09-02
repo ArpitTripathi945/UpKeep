@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:upkeep/home_view.dart';
+import 'package:upkeep/expense_view.dart';
 import 'package:upkeep/main.dart';
 import 'package:upkeep/model/profile_model.dart';
 import 'package:upkeep/routes.dart';

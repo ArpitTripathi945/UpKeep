@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:upkeep/home_view.dart';
+import 'package:upkeep/expense_view.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
@@ -42,7 +42,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
 
   @override
   Widget build(BuildContext context) => isEmailVerified
-      ? HomeView()
+      ? ExpenseView()
       : WillPopScope(
           onWillPop: () async {
             return false;

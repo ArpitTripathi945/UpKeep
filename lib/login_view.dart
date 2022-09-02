@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:upkeep/home_view.dart';
+import 'package:upkeep/expense_view.dart';
 import 'package:upkeep/main.dart';
 import 'package:upkeep/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -140,7 +140,7 @@ class _LoginViewState extends State<LoginView> {
           .then((uid) => {
                 Fluttertoast.showToast(msg: "Login Successful"),
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => HomeView()))
+                    MaterialPageRoute(builder: (context) => ExpenseView()))
               })
           .catchError((e) {
         Fluttertoast.showToast(msg: e!.message);
