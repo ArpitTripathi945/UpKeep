@@ -21,6 +21,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   late TextEditingController amountController;
   late TextEditingController tagController;
   late TextEditingController noteController;
+  final CollectionReference expenses =
+      FirebaseFirestore.instance.collection('expenses');
   String dateTime =
       DateFormat(' KK:mm a\n dd/MM/yyyy').format(DateTime.now()).toString();
 
@@ -157,7 +159,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     //calling our expensemodel
     //sending these values
 
-    FirebaseFirestore expensefirebaseFirestore = FirebaseFirestore.instance;
+    // FirebaseFirestore expensefirebaseFirestore = FirebaseFirestore.instance;
     User? user = auth.currentUser;
 
     ExpenseModel expenseModel = ExpenseModel();
@@ -168,7 +170,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     expenseModel.note = noteController.text;
     expenseModel.dateTime = dateTime;
 
-    await expensefirebaseFirestore.collection("expenses").add({
+    await expenses.add({
       "amount": amountController.text,
       "tag": tagController.text,
       "note": noteController.text,

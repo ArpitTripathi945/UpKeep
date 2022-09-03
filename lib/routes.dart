@@ -5,4 +5,7 @@ class MyRoutes {
   static String loginviewRoute = "/loginview";
   static String profileviewRoute = "/profileview";
   static String verifyRoute = "/verify";
+  static String searchviewRoute = "/searchview";
+  static String userprofileRoute = "/userprofile";
+  static String useranalyticsRoute = "/useranalytics";
 }

@@ -6,8 +6,12 @@ import 'package:upkeep/login_page.dart';
 import 'package:upkeep/login_view.dart';
 import 'package:upkeep/register_view.dart';
 import 'package:upkeep/routes.dart';
+import 'package:upkeep/search_view.dart';
+import 'package:upkeep/service_locator.dart';
 import 'package:upkeep/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:upkeep/user_analytics.dart';
+import 'package:upkeep/user_profile.dart';
 import 'package:upkeep/verify.dart';
 import 'firebase_options.dart';
 import 'package:upkeep/widgets/spinner.dart';
@@ -17,6 +21,7 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setUpLocater();
   runApp(MyApp());
 }
 
@@ -58,6 +63,9 @@ class MyApp extends StatelessWidget {
         MyRoutes.loginviewRoute: (context) => LoginView(),
         MyRoutes.registerviewRoute: (context) => RegisterView(),
         MyRoutes.verifyRoute: (context) => VerifyEmailView(),
+        MyRoutes.userprofileRoute: (context) => UserProfile(),
+        MyRoutes.useranalyticsRoute: (context) => UserAnalytics(),
+        MyRoutes.searchviewRoute: (context) => SearchView(),
       },
     );
   }
