@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:upkeep/expense_view.dart';
+import 'package:upkeep/home_view.dart';
+import 'package:upkeep/routes.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
@@ -42,7 +44,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
 
   @override
   Widget build(BuildContext context) => isEmailVerified
-      ? ExpenseView()
+      ? HomeView()
       : WillPopScope(
           onWillPop: () async {
             return false;
@@ -72,15 +74,17 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                       onPressed: canResendEmail ? sendVerificationEmail : null,
                     ),
                     TextButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size.fromHeight(50),
-                      ),
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      onPressed: () => FirebaseAuth.instance.signOut(),
-                    )
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size.fromHeight(50),
+                        ),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                          Navigator.pushNamed(context, MyRoutes.loginRoute);
+                        })
                   ]),
             ),
           ));

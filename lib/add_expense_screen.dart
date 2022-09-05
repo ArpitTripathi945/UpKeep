@@ -17,14 +17,14 @@ class AddExpenseScreen extends StatefulWidget {
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final formKey = GlobalKey<FormState>();
   final auth = FirebaseAuth.instance;
-  final user = FirebaseAuth.instance.currentUser;
+  //final user = FirebaseAuth.instance.currentUser;
   late TextEditingController amountController;
   late TextEditingController tagController;
   late TextEditingController noteController;
   final CollectionReference expenses =
       FirebaseFirestore.instance.collection('expenses');
   String dateTime =
-      DateFormat(' KK:mm a\n dd/MM/yyyy').format(DateTime.now()).toString();
+      DateFormat(' kk:mm \n dd/MM/yyyy').format(DateTime.now()).toString();
 
   @override
   void initState() {
@@ -170,13 +170,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     expenseModel.note = noteController.text;
     expenseModel.dateTime = dateTime;
 
-    await expenses.add({
+    await expenses.doc(user!.uid).collection('userexpenses').add({
       "amount": amountController.text,
       "tag": tagController.text,
       "note": noteController.text,
       "dateTime": dateTime
     }).then((value) {
       Navigator.pop(context);
-    }).catchError((error) => print("Failed to add new Note due to $error"));
+    }).catchError((error) => print("Failed to add new Expense due to $error"));
   }
 }

@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:upkeep/expense_view.dart';
+import 'package:upkeep/home_view.dart';
 import 'package:upkeep/login_page.dart';
 import 'package:upkeep/login_view.dart';
 import 'package:upkeep/register_view.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
               final User? user = FirebaseAuth.instance.currentUser;
               if (user != null) {
                 if (user.emailVerified) {
-                  return const ExpenseView();
+                  return const HomeView();
                 } else {
                   return const VerifyEmailView();
                 }

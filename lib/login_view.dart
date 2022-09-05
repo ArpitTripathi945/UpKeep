@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:upkeep/expense_view.dart';
+import 'package:upkeep/home_view.dart';
 import 'package:upkeep/main.dart';
 import 'package:upkeep/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:upkeep/service_locator.dart';
+import 'package:upkeep/services/auth_service.dart';
 import 'package:upkeep/widgets/spinner.dart';
 
 class LoginView extends StatefulWidget {
@@ -134,13 +137,13 @@ class _LoginViewState extends State<LoginView> {
 
   void signIn(String email, String password) async {
     if (formkey.currentState!.validate()) {
-      await _auth
-          .signInWithEmailAndPassword(
+      await locator<AuthService>()
+          .signIn(
               email: emailController.text, password: passwordController.text)
           .then((uid) => {
                 Fluttertoast.showToast(msg: "Login Successful"),
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => ExpenseView()))
+                    MaterialPageRoute(builder: (context) => HomeView()))
               })
           .catchError((e) {
         Fluttertoast.showToast(msg: e!.message);

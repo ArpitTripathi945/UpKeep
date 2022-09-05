@@ -7,6 +7,8 @@ import 'package:upkeep/main.dart';
 import 'package:upkeep/model/profile_model.dart';
 import 'package:upkeep/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:upkeep/service_locator.dart';
+import 'package:upkeep/services/auth_service.dart';
 import 'package:upkeep/verify.dart';
 import 'package:upkeep/widgets/spinner.dart';
 
@@ -248,10 +250,9 @@ class _RegisterViewState extends State<RegisterView> {
 
   void signUp(String email, String password) async {
     if (formKey.currentState!.validate()) {
-      await _auth
-          .createUserWithEmailAndPassword(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim())
+      await locator<AuthService>()
+          .createUser(
+              email: emailController.text, password: passwordController.text)
           .then((value) => {postDetailsToFirestore()})
           .catchError((e) {
         Fluttertoast.showToast(msg: e!.message);
@@ -267,7 +268,8 @@ class _RegisterViewState extends State<RegisterView> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    ProfileModel profileModel = ProfileModel();
+    ProfileModel profileModel =
+        ProfileModel(age: '', email: '', firstname: '', currency: '', uid: '');
 
     //writing all the values
     profileModel.uid = user!.uid;

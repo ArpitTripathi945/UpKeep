@@ -10,8 +10,8 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text(textAlign: TextAlign.center, 'sjfbgoenrbkne fb'),
+    return Material(
+      color: Color.fromARGB(255, 15, 17, 32),
     );
   }
 }

@@ -25,7 +25,6 @@ class ExpenseView extends StatefulWidget {
 }
 
 class _ExpenseViewState extends State<ExpenseView> {
-  int currentIndex = 0;
   User? user = FirebaseAuth.instance.currentUser;
   ProfileModel loggedInUser = ProfileModel();
   late TextEditingController updateamountController;
@@ -33,14 +32,9 @@ class _ExpenseViewState extends State<ExpenseView> {
   late TextEditingController updatenoteController;
   final CollectionReference expenses =
       FirebaseFirestore.instance.collection('expenses');
-  final List<Widget> screens = [
-    ExpenseView(),
-    UserProfile(),
-    SearchView(),
-    UserAnalytics()
-  ];
-  final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = ExpenseView();
+  final CollectionReference profile =
+      FirebaseFirestore.instance.collection('profile');
+
   bool shouldPop = false;
 
   @override
@@ -49,11 +43,7 @@ class _ExpenseViewState extends State<ExpenseView> {
     updateamountController = TextEditingController();
     updatetagController = TextEditingController();
     updatenoteController = TextEditingController();
-    FirebaseFirestore.instance
-        .collection("profile")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
+    profile.doc(user!.uid).get().then((value) {
       this.loggedInUser = ProfileModel.fromMap(value.data());
       setState(() {});
     });
@@ -67,8 +57,9 @@ class _ExpenseViewState extends State<ExpenseView> {
       onWillPop: () async {
         return shouldPop;
       },
-      child: Scaffold(
-        body: Padding(
+      child: Material(
+        color: Color.fromARGB(255, 15, 17, 32),
+        child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,16 +84,6 @@ class _ExpenseViewState extends State<ExpenseView> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.fromLTRB(32, 0, 0, 0),
-                    //   child: IconButton(
-                    //       icon: Icon(Icons.logout_outlined),
-                    //       color: Colors.white,
-                    //       onPressed: () {
-                    //         FirebaseAuth.instance.signOut();
-                    //         Navigator.pushNamed(context, MyRoutes.loginRoute);
-                    //       }),
-                    // ),
                   ],
                 ),
               ),
@@ -134,6 +115,8 @@ class _ExpenseViewState extends State<ExpenseView> {
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: expenses
+                      .doc(user!.uid)
+                      .collection('userexpenses')
                       .orderBy("dateTime", descending: true)
                       .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -232,120 +215,6 @@ class _ExpenseViewState extends State<ExpenseView> {
               )
             ],
           ),
-        ),
-        backgroundColor: Color.fromARGB(255, 15, 17, 32),
-        floatingActionButton: FloatingActionButton(
-            backgroundColor: Color.fromARGB(255, 75, 71, 232),
-            child: Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => SingleChildScrollView(
-                          child: Container(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: AddExpenseScreen(),
-                      )));
-            }),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          color: Color.fromARGB(255, 2, 4, 18),
-          notchMargin: 10,
-          child: Container(
-              height: 60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      MaterialButton(
-                        minWidth: 90,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = ExpenseView();
-                            currentIndex = 0;
-                          });
-                        },
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.home,
-                                color: currentIndex == 0
-                                    ? Colors.blueAccent
-                                    : Colors.white,
-                              ),
-                            ]),
-                      ),
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = UserProfile();
-                            currentIndex = 1;
-                          });
-                        },
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.person,
-                                color: currentIndex == 1
-                                    ? Colors.blueAccent
-                                    : Colors.white,
-                              ),
-                            ]),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = SearchView();
-                            currentIndex = 2;
-                          });
-                        },
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.search_rounded,
-                                color: currentIndex == 2
-                                    ? Colors.blueAccent
-                                    : Colors.white,
-                              ),
-                            ]),
-                      ),
-                      MaterialButton(
-                        minWidth: 90,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = UserAnalytics();
-                            currentIndex = 3;
-                          });
-                        },
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.bar_chart_rounded,
-                                color: currentIndex == 3
-                                    ? Colors.blueAccent
-                                    : Colors.white,
-                              ),
-                            ]),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
         ),
       ),
     );
