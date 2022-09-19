@@ -16,21 +16,32 @@ class AddExpenseScreen extends StatefulWidget {
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final formKey = GlobalKey<FormState>();
+
   final auth = FirebaseAuth.instance;
-  //final user = FirebaseAuth.instance.currentUser;
+
   late TextEditingController amountController;
-  late TextEditingController tagController;
+
   late TextEditingController noteController;
-  final CollectionReference expenses =
-      FirebaseFirestore.instance.collection('expenses');
+  final CollectionReference ref =
+      FirebaseFirestore.instance.collection('userdata');
   String dateTime =
-      DateFormat(' kk:mm \n dd/MM/yyyy').format(DateTime.now()).toString();
+      DateFormat(' KK:mm a\n dd/MM/yyyy').format(DateTime.now()).toString();
+  String? tag;
+  final tags = [
+    'Food',
+    'Travel',
+    'Bills',
+    'Service',
+    'Shopping',
+    'Entertainment',
+    'Others'
+  ];
 
   @override
   void initState() {
     super.initState();
     amountController = TextEditingController();
-    tagController = TextEditingController();
+
     noteController = TextEditingController();
   }
 
@@ -63,6 +74,19 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   color: Color.fromARGB(255, 15, 17, 32),
                 ),
               ),
+              DropdownButton<String>(
+                  hint: Align(
+                    child: Text(
+                      "Select Tag type",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ),
+                  isExpanded: true,
+                  alignment: AlignmentDirectional.center,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  value: tag,
+                  items: tags.map(buildMenuItem).toList(),
+                  onChanged: (value) => setState(() => this.tag = value)),
               TextFormField(
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.phone,
@@ -75,7 +99,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 },
                 maxLength: 4,
                 autofocus: true,
-                textAlign: TextAlign.center,
                 controller: amountController,
                 decoration: InputDecoration(
                     hintText: 'Amount',
@@ -94,30 +117,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   }
                   return null;
                 },
-                maxLength: 15,
-                autofocus: true,
-                textAlign: TextAlign.center,
-                controller: tagController,
-                decoration: InputDecoration(
-                    hintText: 'Tag',
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                    )),
-              ),
-              TextFormField(
-                textInputAction: TextInputAction.done,
-                textCapitalization: TextCapitalization.sentences,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Fields cannot be empty';
-                  }
-                  return null;
-                },
                 maxLength: 30,
                 autofocus: true,
-                textAlign: TextAlign.center,
                 controller: noteController,
                 decoration: InputDecoration(
                     hintText: 'Any note...',
@@ -135,9 +136,28 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                     primary: Color.fromARGB(255, 15, 17, 32)),
-                onPressed: () {
-                  sendingExpenses(amountController.text, tagController.text,
-                      noteController.text, dateTime);
+                onPressed: () async {
+                  User? user = auth.currentUser;
+                  if (formKey.currentState!.validate()) {
+                    ExpenseModel expenseModel = ExpenseModel();
+
+                    //writing all the values
+
+                    expenseModel.amount = amountController.text;
+                    expenseModel.tag = tag;
+                    expenseModel.note = noteController.text;
+                    expenseModel.dateTime = dateTime;
+
+                    await ref.doc(user!.uid).collection('userexpenses').add({
+                      "amount": amountController.text,
+                      "tag": tag,
+                      "note": noteController.text,
+                      "dateTime": dateTime,
+                    }).then((value) {
+                      Navigator.pop(context);
+                    }).catchError((error) =>
+                        print("Failed to add new Expense due to $error"));
+                  }
                 },
               ),
             ],
@@ -147,36 +167,50 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     );
   }
 
-  void sendingExpenses(
-      String amount, String tag, String note, String dateTime) async {
-    if (formKey.currentState!.validate()) {
-      await postExpenseToFirestore();
-    }
-  }
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      );
 
-  postExpenseToFirestore() async {
-    //callling our firestore
-    //calling our expensemodel
-    //sending these values
+  // Future<void> sendingExpenses(int index, String amount, String tag,
+  //     String note, String dateTime) async {
+  //   if (formKey.currentState!.validate()) {
+  //     await postExpenseToFirestore();
+  //   }
+  // }
 
-    // FirebaseFirestore expensefirebaseFirestore = FirebaseFirestore.instance;
-    User? user = auth.currentUser;
+  // postExpenseToFirestore() async {
+  //   //callling our firestore
+  //   //calling our expensemodel
+  //   //sending these values
 
-    ExpenseModel expenseModel = ExpenseModel();
+  //   // FirebaseFirestore expensefirebaseFirestore = FirebaseFirestore.instance;
+  //   User? user = auth.currentUser;
 
-    //writing all the values
-    expenseModel.amount = amountController.text;
-    expenseModel.tag = tagController.text;
-    expenseModel.note = noteController.text;
-    expenseModel.dateTime = dateTime;
+  //   ExpenseModel expenseModel = ExpenseModel();
 
-    await expenses.doc(user!.uid).collection('userexpenses').add({
-      "amount": amountController.text,
-      "tag": tagController.text,
-      "note": noteController.text,
-      "dateTime": dateTime
-    }).then((value) {
-      Navigator.pop(context);
-    }).catchError((error) => print("Failed to add new Expense due to $error"));
-  }
+  //   //writing all the values
+
+  //   expenseModel.index = index;
+  //   expenseModel.amount = amountController.text;
+  //   expenseModel.tag = tagController.text;
+  //   expenseModel.note = noteController.text;
+  //   expenseModel.dateTime = dateTime;
+
+  //   await ref.doc(user!.uid).collection('userexpenses').add({
+  //     "index": index,
+  //     "amount": amountController.text,
+  //     "tag": tagController.text,
+  //     "note": noteController.text,
+  //     "dateTime": dateTime,
+  //   }).then((value) {
+  //     Navigator.pop(context);
+  //   }).catchError((error) => print("Failed to add new Expense due to $error"));
+  // }
 }

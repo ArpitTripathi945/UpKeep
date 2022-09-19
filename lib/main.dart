@@ -1,19 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:upkeep/screens/about_view.dart';
 
-import 'package:upkeep/expense_view.dart';
-import 'package:upkeep/home_view.dart';
-import 'package:upkeep/login_page.dart';
-import 'package:upkeep/login_view.dart';
-import 'package:upkeep/register_view.dart';
+import 'package:upkeep/screens/expense_view.dart';
+import 'package:upkeep/screens/home_view.dart';
+import 'package:upkeep/screens/login_page.dart';
+import 'package:upkeep/screens/login_view.dart';
+import 'package:upkeep/screens/register_view.dart';
 import 'package:upkeep/routes.dart';
-import 'package:upkeep/search_view.dart';
-import 'package:upkeep/service_locator.dart';
-import 'package:upkeep/splash_screen.dart';
+import 'package:upkeep/screens/search_view.dart';
+import 'package:upkeep/screens/service_locator.dart';
+import 'package:upkeep/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:upkeep/user_analytics.dart';
-import 'package:upkeep/user_profile.dart';
-import 'package:upkeep/verify.dart';
+import 'package:upkeep/screens/user_analytics.dart';
+import 'package:upkeep/screens/user_profile.dart';
+import 'package:upkeep/screens/verify.dart';
 import 'firebase_options.dart';
 import 'package:upkeep/widgets/spinner.dart';
 
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
         MyRoutes.userprofileRoute: (context) => UserProfile(),
         MyRoutes.useranalyticsRoute: (context) => UserAnalytics(),
         MyRoutes.searchviewRoute: (context) => SearchView(),
+        MyRoutes.aboutviewRoute: (context) => AboutView(),
       },
     );
   }

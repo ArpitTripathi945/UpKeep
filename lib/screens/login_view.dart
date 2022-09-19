@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:upkeep/expense_view.dart';
-import 'package:upkeep/home_view.dart';
+import 'package:upkeep/screens/expense_view.dart';
+import 'package:upkeep/screens/home_view.dart';
 import 'package:upkeep/main.dart';
 import 'package:upkeep/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:upkeep/service_locator.dart';
+import 'package:upkeep/screens/service_locator.dart';
 import 'package:upkeep/services/auth_service.dart';
 import 'package:upkeep/widgets/spinner.dart';
 
@@ -38,7 +38,7 @@ class _LoginViewState extends State<LoginView> {
           key: formkey,
           child: Column(children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 40, 325, 20),
+              padding: const EdgeInsets.fromLTRB(15, 40, 325, 20),
               child: IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(
@@ -122,8 +122,23 @@ class _LoginViewState extends State<LoginView> {
                 )),
             const SizedBox(height: 35),
             ElevatedButton(
-              onPressed: () {
-                signIn(emailController.text, passwordController.text);
+              onPressed: () async {
+                if (formkey.currentState!.validate()) {
+                  await locator<AuthService>()
+                      .signIn(
+                          email: emailController.text,
+                          password: passwordController.text)
+                      .then((uid) => {
+                            Fluttertoast.showToast(msg: "Login Successful"),
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => HomeView()))
+                          })
+                      .catchError((e) {
+                    Fluttertoast.showToast(msg: e!.message);
+                    Navigator.pushNamed(context, MyRoutes.loginRoute);
+                  });
+                }
               },
               child: Text("Login"),
               style: ElevatedButton.styleFrom(
@@ -133,21 +148,5 @@ class _LoginViewState extends State<LoginView> {
             ),
           ]),
         )));
-  }
-
-  void signIn(String email, String password) async {
-    if (formkey.currentState!.validate()) {
-      await locator<AuthService>()
-          .signIn(
-              email: emailController.text, password: passwordController.text)
-          .then((uid) => {
-                Fluttertoast.showToast(msg: "Login Successful"),
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => HomeView()))
-              })
-          .catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
-      });
-    }
   }
 }

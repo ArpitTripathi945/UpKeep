@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:upkeep/expense_view.dart';
-import 'package:upkeep/home_view.dart';
+import 'package:upkeep/screens/expense_view.dart';
+import 'package:upkeep/screens/home_view.dart';
 import 'package:upkeep/routes.dart';
 
 class VerifyEmailView extends StatefulWidget {

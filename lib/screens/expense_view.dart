@@ -3,18 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
-import 'package:upkeep/search_view.dart';
-import 'package:upkeep/service_locator.dart';
-import 'package:upkeep/user_analytics.dart';
-import 'package:upkeep/add_expense_screen.dart';
+import 'package:upkeep/screens/about_view.dart';
 
-import 'package:upkeep/model/expense_model.dart';
+import 'package:upkeep/screens/search_view.dart';
+import 'package:upkeep/screens/service_locator.dart';
+import 'package:upkeep/screens/user_analytics.dart';
+import 'package:upkeep/screens/add_expense_screen.dart';
+
 import 'package:upkeep/model/profile_model.dart';
 import 'package:upkeep/routes.dart';
 import 'package:intl/intl.dart';
-import 'package:upkeep/user_profile.dart';
+import 'package:upkeep/screens/user_profile.dart';
 import 'package:upkeep/widgets/spinner.dart';
 
 class ExpenseView extends StatefulWidget {
@@ -30,10 +30,8 @@ class _ExpenseViewState extends State<ExpenseView> {
   late TextEditingController updateamountController;
   late TextEditingController updatetagController;
   late TextEditingController updatenoteController;
-  final CollectionReference expenses =
-      FirebaseFirestore.instance.collection('expenses');
-  final CollectionReference profile =
-      FirebaseFirestore.instance.collection('profile');
+  final CollectionReference ref =
+      FirebaseFirestore.instance.collection('userdata');
 
   bool shouldPop = false;
 
@@ -43,7 +41,7 @@ class _ExpenseViewState extends State<ExpenseView> {
     updateamountController = TextEditingController();
     updatetagController = TextEditingController();
     updatenoteController = TextEditingController();
-    profile.doc(user!.uid).get().then((value) {
+    ref.doc(user!.uid).get().then((value) {
       this.loggedInUser = ProfileModel.fromMap(value.data());
       setState(() {});
     });
@@ -70,10 +68,16 @@ class _ExpenseViewState extends State<ExpenseView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Icon(
-                      Icons.wallet_rounded,
-                      size: 28.0,
-                      color: Colors.white,
+                    InkWell(
+                      child: Icon(
+                        Icons.wallet_rounded,
+                        size: 28.0,
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => AboutView()));
+                      },
                     ),
                     Text(
                       ' Welcome, ${loggedInUser.firstname}',
@@ -114,10 +118,10 @@ class _ExpenseViewState extends State<ExpenseView> {
               SizedBox(height: 10),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: expenses
+                  stream: ref
                       .doc(user!.uid)
                       .collection('userexpenses')
-                      .orderBy("dateTime", descending: true)
+                      .orderBy("index", descending: true)
                       .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     //checking the connection state, if we still load the data we display a spinner
@@ -313,7 +317,9 @@ class _ExpenseViewState extends State<ExpenseView> {
                               final String tag = updatetagController.text;
                               final String note = updatenoteController.text;
                               if (amount != null) {
-                                await expenses
+                                await ref
+                                    .doc(user!.uid)
+                                    .collection('userexpenses')
                                     .doc(documentSnapshot!.id)
                                     .update({
                                   "amount": amount,
@@ -335,8 +341,6 @@ class _ExpenseViewState extends State<ExpenseView> {
 
   @override
   Future<void> delete(String productId) async {
-    final CollectionReference expenses =
-        FirebaseFirestore.instance.collection('expenses');
-    await expenses.doc(productId).delete();
+    await ref.doc(user!.uid).collection('userexpenses').doc(productId).delete();
   }
 }

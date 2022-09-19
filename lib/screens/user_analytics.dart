@@ -10,6 +10,6 @@ class UserAnalytics extends StatefulWidget {
 class _UserAnalyticsState extends State<UserAnalytics> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Material();
   }
 }

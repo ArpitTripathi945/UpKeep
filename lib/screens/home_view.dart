@@ -2,10 +2,10 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:upkeep/User_Analytics.dart';
-import 'package:upkeep/add_expense_screen.dart';
-import 'package:upkeep/expense_view.dart';
-import 'package:upkeep/search_view.dart';
-import 'package:upkeep/user_profile.dart';
+import 'package:upkeep/screens/add_expense_screen.dart';
+import 'package:upkeep/screens/expense_view.dart';
+import 'package:upkeep/screens/search_view.dart';
+import 'package:upkeep/screens/user_profile.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

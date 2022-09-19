@@ -8,4 +8,5 @@ class MyRoutes {
   static String searchviewRoute = "/searchview";
   static String userprofileRoute = "/userprofile";
   static String useranalyticsRoute = "/useranalytics";
+  static String aboutviewRoute = "/about";
 }

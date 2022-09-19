@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:upkeep/expense_view.dart';
+import 'package:upkeep/screens/expense_view.dart';
 import 'package:upkeep/main.dart';
 import 'package:upkeep/model/profile_model.dart';
 import 'package:upkeep/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:upkeep/service_locator.dart';
+import 'package:upkeep/screens/service_locator.dart';
 import 'package:upkeep/services/auth_service.dart';
-import 'package:upkeep/verify.dart';
+import 'package:upkeep/screens/verify.dart';
 import 'package:upkeep/widgets/spinner.dart';
 
 class RegisterView extends StatefulWidget {
@@ -268,8 +268,7 @@ class _RegisterViewState extends State<RegisterView> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    ProfileModel profileModel =
-        ProfileModel(age: '', email: '', firstname: '', currency: '', uid: '');
+    ProfileModel profileModel = ProfileModel();
 
     //writing all the values
     profileModel.uid = user!.uid;
@@ -279,7 +278,7 @@ class _RegisterViewState extends State<RegisterView> {
     profileModel.currency = currController.text;
 
     await firebaseFirestore
-        .collection("profile")
+        .collection("userdata")
         .doc(user.uid)
         .set(profileModel.toMap());
     Navigator.pushAndRemoveUntil(
