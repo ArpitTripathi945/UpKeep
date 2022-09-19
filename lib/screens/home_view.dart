@@ -1,7 +1,7 @@
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
-import 'package:upkeep/User_Analytics.dart';
+import 'package:upkeep/screens/user_analytics.dart';
 import 'package:upkeep/screens/add_expense_screen.dart';
 import 'package:upkeep/screens/expense_view.dart';
 import 'package:upkeep/screens/search_view.dart';

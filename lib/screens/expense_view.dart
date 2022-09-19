@@ -121,7 +121,7 @@ class _ExpenseViewState extends State<ExpenseView> {
                   stream: ref
                       .doc(user!.uid)
                       .collection('userexpenses')
-                      .orderBy("index", descending: true)
+                      .orderBy("dateTime", descending: true)
                       .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     //checking the connection state, if we still load the data we display a spinner
