@@ -16,11 +16,8 @@ class AddExpenseScreen extends StatefulWidget {
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final formKey = GlobalKey<FormState>();
-
   final auth = FirebaseAuth.instance;
-
   late TextEditingController amountController;
-
   late TextEditingController noteController;
   final CollectionReference ref =
       FirebaseFirestore.instance.collection('userdata');
@@ -41,7 +38,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   void initState() {
     super.initState();
     amountController = TextEditingController();
-
     noteController = TextEditingController();
   }
 

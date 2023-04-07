@@ -56,7 +56,7 @@ class _UserProfileState extends State<UserProfile> {
             ),
           ),
           SizedBox(height: 30),
-          CircleAvatar(
+          const CircleAvatar(
             backgroundColor: Colors.white,
             maxRadius: 59.0,
             child: CircleAvatar(
@@ -65,8 +65,11 @@ class _UserProfileState extends State<UserProfile> {
               child: CircleAvatar(
                 maxRadius: 50.0,
                 backgroundColor: Colors.blueAccent,
-                child: Image.asset('assets/Wallet_icon.png',
-                    alignment: Alignment.topCenter),
+                child: Icon(
+                  Icons.person,
+                  size: 70.0,
+                  color: Color.fromARGB(255, 15, 17, 32),
+                ),
               ),
             ),
           ),

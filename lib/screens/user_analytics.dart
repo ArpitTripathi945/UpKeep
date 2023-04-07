@@ -10,6 +10,8 @@ class UserAnalytics extends StatefulWidget {
 class _UserAnalyticsState extends State<UserAnalytics> {
   @override
   Widget build(BuildContext context) {
-    return Material();
+    return Material(
+      color: Color.fromARGB(255, 15, 17, 32),
+    );
   }
 }

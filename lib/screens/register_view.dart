@@ -250,8 +250,8 @@ class _RegisterViewState extends State<RegisterView> {
 
   void signUp(String email, String password) async {
     if (formKey.currentState!.validate()) {
-      await locator<AuthService>()
-          .createUser(
+      await _auth
+          .createUserWithEmailAndPassword(
               email: emailController.text, password: passwordController.text)
           .then((value) => {postDetailsToFirestore()})
           .catchError((e) {

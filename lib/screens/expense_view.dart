@@ -34,6 +34,16 @@ class _ExpenseViewState extends State<ExpenseView> {
       FirebaseFirestore.instance.collection('userdata');
 
   bool shouldPop = false;
+  String? tag;
+  final tags = [
+    'Food',
+    'Travel',
+    'Bills',
+    'Service',
+    'Shopping',
+    'Entertainment',
+    'Others'
+  ];
 
   @override
   void initState() {
@@ -261,6 +271,34 @@ class _ExpenseViewState extends State<ExpenseView> {
                               color: Color.fromARGB(255, 15, 17, 32),
                             ),
                           ),
+                          DropdownButton<String>(
+                          hint: Align(
+                    child: Text(
+                      "Update Tag",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ),
+                  isExpanded: true,
+                  alignment: AlignmentDirectional.center,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  value: tag,
+                  items: tags.map(buildMenuItem).toList(),
+                  onChanged: (value) => setState(() => this.tag = value)),
+                          
+                          // TextFormField(
+                          //   textInputAction: TextInputAction.done,
+                          //   textCapitalization: TextCapitalization.sentences,
+                          //   maxLength: 15,
+                          //   autofocus: true,
+                          //   textAlign: TextAlign.center,
+                          //   controller: updatetagController,
+                          //   decoration: InputDecoration(
+                          //       hintText: 'Update tag',
+                          //       hintStyle: const TextStyle(
+                          //         color: Colors.grey,
+                          //         fontSize: 14,
+                          //       )),
+                          // ),
                           TextFormField(
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.phone,
@@ -270,20 +308,6 @@ class _ExpenseViewState extends State<ExpenseView> {
                             controller: updateamountController,
                             decoration: InputDecoration(
                                 hintText: 'Update amount',
-                                hintStyle: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                )),
-                          ),
-                          TextFormField(
-                            textInputAction: TextInputAction.done,
-                            textCapitalization: TextCapitalization.sentences,
-                            maxLength: 15,
-                            autofocus: true,
-                            textAlign: TextAlign.center,
-                            controller: updatetagController,
-                            decoration: InputDecoration(
-                                hintText: 'Update tag',
                                 hintStyle: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 14,
@@ -313,8 +337,8 @@ class _ExpenseViewState extends State<ExpenseView> {
                             style: ElevatedButton.styleFrom(
                                 primary: Color.fromARGB(255, 15, 17, 32)),
                             onPressed: () async {
+                              final String tag = tag;
                               final String amount = updateamountController.text;
-                              final String tag = updatetagController.text;
                               final String note = updatenoteController.text;
                               if (amount != null) {
                                 await ref
@@ -343,4 +367,15 @@ class _ExpenseViewState extends State<ExpenseView> {
   Future<void> delete(String productId) async {
     await ref.doc(user!.uid).collection('userexpenses').doc(productId).delete();
   }
+
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      );
 }

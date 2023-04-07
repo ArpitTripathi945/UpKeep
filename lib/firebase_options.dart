@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return web;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -67,7 +64,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '229438324185',
     projectId: 'upkeep-1658b',
     storageBucket: 'upkeep-1658b.appspot.com',
-    iosClientId: '229438324185-8jlv18b01jcuvpl9nqqtu03j4rjdhcq4.apps.googleusercontent.com',
+    iosClientId:
+        '229438324185-8jlv18b01jcuvpl9nqqtu03j4rjdhcq4.apps.googleusercontent.com',
     iosBundleId: 'com.example.upkeep',
   );
 
@@ -77,7 +75,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '229438324185',
     projectId: 'upkeep-1658b',
     storageBucket: 'upkeep-1658b.appspot.com',
-    iosClientId: '229438324185-8jlv18b01jcuvpl9nqqtu03j4rjdhcq4.apps.googleusercontent.com',
+    iosClientId:
+        '229438324185-8jlv18b01jcuvpl9nqqtu03j4rjdhcq4.apps.googleusercontent.com',
     iosBundleId: 'com.example.upkeep',
   );
 }

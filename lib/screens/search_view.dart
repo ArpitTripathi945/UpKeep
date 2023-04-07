@@ -12,6 +12,7 @@ class _SearchViewState extends State<SearchView> {
   Widget build(BuildContext context) {
     return Material(
       color: Color.fromARGB(255, 15, 17, 32),
+      
     );
   }
 }
